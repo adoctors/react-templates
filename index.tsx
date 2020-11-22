@@ -50,7 +50,7 @@ export default (props) => {
   // 行可选
   const [selectedRowIds, setSelectedRowIds] = useState<string[]>([]);
 
-  // draser 相关
+  // drawer 相关
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
   const [drawerHandleType, setDrawerHandleType] = useState<handleType>(
     "create"
