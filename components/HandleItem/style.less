@@ -1,0 +1,84 @@
+/*
+ * @Author: kl
+ * @email: qkeliang@163.com
+ * @Description: react-hooks-table-drawer-detail
+ */
+ 
+.DrawerBodyWrap {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: auto;
+
+
+    .formWrap {
+        display: flex;
+        flex-direction: column;
+        flex: auto;
+        overflow-y: auto;
+
+        :global {
+            .ant-form-item {
+                margin-bottom: 10px;
+            }
+
+            .ant-input-textarea-clear-icon {
+                color: @black-4;
+            }
+        }
+    }
+
+    .textAreaLen {
+        text-align: right;
+        color: @black-4;
+    }
+}
+
+
+.itemRequired {
+    display: inline-block;
+    margin-right: 4px;
+    color: #ff4d4f;
+    font-size: 14px;
+    font-family: SimSun, sans-serif;
+    line-height: 1;
+}
+
+.questionIcon {
+    margin-left: 6px;
+    color: @black-4;
+    cursor: pointer;
+}
+
+.footerWrap {
+    display: flex;
+    flex-direction: row-reverse;
+    margin-top: 10px;
+}
+
+
+.wrapperDrawer {
+    :global {
+        .ant-drawer-wrapper-body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ant-drawer-header {
+            padding: 20px 20px 0 20px;
+
+            .ant-drawer-title {
+                font-size: 20px;
+            }
+        }
+
+        .ant-drawer-body {
+            flex: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex: auto;
+        }
+    }
+}

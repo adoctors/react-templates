@@ -1,2 +1,0 @@
-# react-templates
-react templates

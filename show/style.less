@@ -1,0 +1,39 @@
+/*
+ * @Author: kl
+ * @email: qkeliang@163.com
+ * @Description: react-hooks-table-drawer-detail
+ */
+
+.DetailWrap {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 20px;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .titleWrap {
+      display: flex;
+      align-items: center;
+    }
+
+    .goBackIcon {
+      margin-right: 16px;
+      .fz20();
+      color: @black-4;
+    }
+
+    .pageTitle {
+      .fz20();
+      .fzBold();
+    }
+
+    .subTitle {
+      .fz14();
+      color: @black-4;
+    }
+  }
+}
