@@ -1,0 +1,42 @@
+/*
+ * @Author: kl
+ * @email: qkeliang@163.com
+ * @Description: react-hooks-table
+ */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 20px;
+
+  .headerWrap {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+
+    .pageTitle {
+      font-size: 20px;
+      font-weight: bold;
+      margin-right: 100px;
+    }
+  }
+
+
+  .tableWrapper {
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+
+    :global {
+      .ant-table {
+        tbody {
+          tr {
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}
