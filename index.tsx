@@ -6,9 +6,8 @@
 
 import React, { useState, useEffect } from "react";
 import { Button, Tooltip, Drawer } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
 import { requestApi } from "@/utils/request";
-import { RTable, RTextTooltip, RPagination, utils } from "rcrai-rainbow";
+import { RTable, RTextTooltip, RPagination, RIcon, utils } from "rcrai-rainbow";
 import dayjs from "dayjs";
 import HandleItem from "./components/HandleItem";
 
@@ -50,7 +49,7 @@ export default (props) => {
   // 行可选
   const [selectedRowIds, setSelectedRowIds] = useState<string[]>([]);
 
-  // draser 相关
+  // drawer 相关
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
   const [drawerHandleType, setDrawerHandleType] = useState<handleType>(
     "create"
@@ -173,7 +172,7 @@ export default (props) => {
         <div className={styles.pageTitle}>title</div>
         <Button
           type="primary"
-          icon={<PlusOutlined />}
+          icon={<RIcon type="PlusOutlined" />}
           style={{ marginLeft: "10px" }}
           onClick={() => {
             showDrawer("create");
