@@ -7,9 +7,8 @@
 import React, { useState, useEffect } from "react";
 import { Tabs } from "antd";
 import { history } from "umi";
-import { LeftOutlined } from "@ant-design/icons";
 import { IObject } from "@/models/connect";
-import { RButton } from "rcrai-rainbow";
+import { RButton, RIcon } from "rcrai-rainbow";
 import { getUrlParams } from "@/utils/utils";
 
 import styles from "./style.less";
@@ -30,7 +29,8 @@ export default (props) => {
     <div className={styles.DetailWrap}>
       <div className={styles.header}>
         <div className={styles.titleWrap}>
-          <LeftOutlined
+          <RIcon
+            type="LeftOutlined"
             className={styles.goBackIcon}
             onClick={() => {
               history.goBack();

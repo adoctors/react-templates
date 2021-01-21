@@ -3,7 +3,6 @@
  * @email: qkeliang@163.com
  * @Description: react-hooks-table-drawer-detail
  */
- 
 .DrawerBodyWrap {
     width: 100%;
     height: 100%;
@@ -11,6 +10,15 @@
     flex-direction: column;
     flex: auto;
 
+    :global {
+
+        .ant-spin-nested-loading,
+        .ant-spin-container {
+            display: flex;
+            flex-direction: column;
+            flex: auto;
+        }
+    }
 
     .formWrap {
         display: flex;

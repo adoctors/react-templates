@@ -5,7 +5,7 @@
  */
 
 import React, { useState, useEffect } from "react";
-import { Button, Form, Input, Select, InputNumber, Tooltip } from "antd";
+import { Button, Form, Input, Select, InputNumber, Tooltip, Spin } from "antd";
 import { RSelect, RSingleSelect } from "rcrai-rainbow";
 import { requestApi } from "@/utils/request";
 import { InfoCircleOutlined } from "@ant-design/icons";
@@ -34,7 +34,7 @@ export default (props: IProps) => {
   const { drawerHandleType, currentItem, onSubmitOk, onCancel } = props;
   const [form] = Form.useForm();
   const [descriptionLen, setDescriptionLen] = useState<number>(0);
-
+  const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
     if (drawerHandleType === "create") {
       form.setFieldsValue({
@@ -77,6 +77,7 @@ export default (props: IProps) => {
 
   const onSubmit = (): void => {
     form.validateFields().then((vals) => {
+      setLoading(true);
       if (drawerHandleType === "create") {
         onSubmitOk();
       }
@@ -89,122 +90,124 @@ export default (props: IProps) => {
 
   return (
     <div className={styles.DrawerBodyWrap}>
-      <Form
-        {...formItemLayout}
-        form={form}
-        colon={false}
-        labelAlign="left"
-        className={styles.formWrap}
-      >
-        <Form.Item
-          label="Input"
-          name="Input"
-          rules={[
-            { required: true, message: "请输入名称" },
-            {
-              max: 20,
-              message: "最大长度为20",
-            },
-            {
-              pattern: nonSpecialCharacters,
-              message: "不支持特殊字符",
-            },
-          ]}
-        >
-          <Input
-            placeholder="名称最大长度为20，不支持特殊字符"
-            style={{ width: "100%" }}
-          />
-        </Form.Item>
-        <Form.Item
-          label={
-            <span>
-              Select
-              <Tooltip title="下拉单选列表">
-                <InfoCircleOutlined className={styles.questionIcon} />
-              </Tooltip>
-            </span>
-          }
-          name="Select"
-          rules={[{ required: true, message: "请选择" }]}
-        >
-          <Select
-            disabled={drawerHandleType !== "create"}
-            placeholder="请选择"
-            style={{ width: "100%" }}
-          >
-            {[].map((item) => (
-              <Option value={item.id} key={item.id}>
-                {item.name}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
-
-        <Form.Item
-          label="RSingleSelect"
-          name="RSingleSelect"
-          rules={[{ required: true, message: "请选择" }]}
-        >
-          <RSingleSelect
-            placeholder="请选择"
-            data={[]}
-            searchField={["name"]}
-            valueField="id"
-            // onChange={onChange}
-          />
-        </Form.Item>
-
-        <Form.Item
-          label="RSelect"
-          name="RSelect"
-          rules={[{ required: true, message: "请选择" }]}
-        >
-          <RSelect data={[]} placeholder="请选择" maxTagCount={1} />
-        </Form.Item>
-
-        <Form.Item
-          label={
-            <span>
-              <span className={styles.itemRequired}>*</span>
-              InputNumber
-            </span>
-          }
+      <Spin spinning={loading}>
+        <Form
+          {...formItemLayout}
+          form={form}
+          colon={false}
+          labelAlign="left"
+          className={styles.formWrap}
         >
           <Form.Item
-            name="InputNumber"
+            label="Input"
+            name="Input"
             rules={[
-              { required: true, message: "请输入时间间隔" },
-              { type: "number", max: 999, message: "最大999" },
+              { required: true, message: "请输入名称" },
+              {
+                max: 20,
+                message: "最大长度为20",
+              },
+              {
+                pattern: nonSpecialCharacters,
+                message: "不支持特殊字符",
+              },
             ]}
-            noStyle
           >
-            <InputNumber min={0} placeholder="请输入" />
+            <Input
+              placeholder="名称最大长度为20，不支持特殊字符"
+              style={{ width: "100%" }}
+            />
           </Form.Item>
-          <span className="ant-form-text">分钟</span>
-        </Form.Item>
+          <Form.Item
+            label={
+              <span>
+                Select
+                <Tooltip title="下拉单选列表">
+                  <InfoCircleOutlined className={styles.questionIcon} />
+                </Tooltip>
+              </span>
+            }
+            name="Select"
+            rules={[{ required: true, message: "请选择" }]}
+          >
+            <Select
+              disabled={drawerHandleType !== "create"}
+              placeholder="请选择"
+              style={{ width: "100%" }}
+            >
+              {[].map((item) => (
+                <Option value={item.id} key={item.id}>
+                  {item.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
 
-        <Form.Item label="&nbsp;&nbsp;&nbsp;TextArea" name="description">
-          <TextArea
-            onChange={(e) => {
-              e.persist();
-              if (e.target.value) setDescriptionLen(e.target.value.length);
-            }}
-            maxLength={500}
-            rows={4}
-            placeholder="请输入描述"
-            allowClear
-          />
-        </Form.Item>
-      </Form>
-      <div className={styles.footerWrap}>
-        <Button type="primary" onClick={onSubmit}>
-          保存
-        </Button>
-        <Button style={{ marginRight: 12 }} onClick={onCancel}>
-          取消
-        </Button>
-      </div>
+          <Form.Item
+            label="RSingleSelect"
+            name="RSingleSelect"
+            rules={[{ required: true, message: "请选择" }]}
+          >
+            <RSingleSelect
+              placeholder="请选择"
+              data={[]}
+              searchField={["name"]}
+              valueField="id"
+              // onChange={onChange}
+            />
+          </Form.Item>
+
+          <Form.Item
+            label="RSelect"
+            name="RSelect"
+            rules={[{ required: true, message: "请选择" }]}
+          >
+            <RSelect data={[]} placeholder="请选择" maxTagCount={1} />
+          </Form.Item>
+
+          <Form.Item
+            label={
+              <span>
+                <span className={styles.itemRequired}>*</span>
+                InputNumber
+              </span>
+            }
+          >
+            <Form.Item
+              name="InputNumber"
+              rules={[
+                { required: true, message: "请输入时间间隔" },
+                { type: "number", max: 999, message: "最大999" },
+              ]}
+              noStyle
+            >
+              <InputNumber min={0} placeholder="请输入" />
+            </Form.Item>
+            <span className="ant-form-text">分钟</span>
+          </Form.Item>
+
+          <Form.Item label="&nbsp;&nbsp;&nbsp;TextArea" name="description">
+            <TextArea
+              onChange={(e) => {
+                e.persist();
+                if (e.target.value) setDescriptionLen(e.target.value.length);
+              }}
+              maxLength={500}
+              rows={4}
+              placeholder="请输入描述"
+              allowClear
+            />
+          </Form.Item>
+        </Form>
+        <div className={styles.footerWrap}>
+          <Button type="primary" onClick={onSubmit} loading={loading}>
+            保存
+          </Button>
+          <Button style={{ marginRight: 12 }} onClick={onCancel}>
+            取消
+          </Button>
+        </div>
+      </Spin>
     </div>
   );
 };
