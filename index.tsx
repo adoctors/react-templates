@@ -6,6 +6,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Button, Tooltip } from "antd";
+import { useImmer } from "use-immer";
 import { requestApi } from "@/utils/request";
 import { RTable, RTextTooltip, RPagination, utils } from "rcrai-rainbow";
 import dayjs from "dayjs";
@@ -26,23 +27,38 @@ const { list } = Mock.mock({
 });
 
 type IObject = { [key: string]: any };
+interface ITableAndPage {
+  /** 列表的loading*/
+  tableLoading: boolean;
+  /** 列表的数据*/
+  dataSource: IObject[];
+  /** 分页器-page*/
+  page: number;
+  /** 分页器-pageSize*/
+  pageSize: number;
+  /** 分页器-total*/
+  total: number;
+}
+const paginationNamespace = "namespace";
 export default (props) => {
-  // 分页相关
-  const [page, setPage] = useState<number>(+utils.getPageQuery("page") || 1);
-  const [pageSize, setPageSize] = useState<number>(10);
-  const [total, setTotal] = useState<number>(51);
+  const [state, setState] = useImmer<ITableAndPage>({
+    page: +utils.getPageQuery("page") || 1,
+    pageSize: +utils.getLocalPageSize(paginationNamespace) || 10,
+    total: 33,
+    tableLoading: false,
+    dataSource: list,
+  });
   //   排序相关
   const [sortInfo, setSortInfo] = useState<IObject>({
     field: utils.getPageQuery("field") || "key1",
     order: utils.getPageQuery("order") || "descend",
   });
-  const [tableLoading, setTableLoading] = useState<boolean>(false);
-  const [dataSource, setDataSource] = useState<[]>(list || []);
+
   // 行可选
   const [selectedRowIds, setSelectedRowIds] = useState<string[]>([]);
   useEffect(() => {
     // getData();
-  }, [page, pageSize, sortInfo]);
+  }, [state.page, state.pageSize, sortInfo]);
 
   const columns = [
     {
@@ -116,7 +132,9 @@ export default (props) => {
   ];
 
   const getData = async (): Promise<void> => {
-    setTableLoading(true);
+    setState((state) => {
+      state.tableLoading = true;
+    });
     const {
       data: { code, data },
     } = await requestApi({
@@ -124,18 +142,22 @@ export default (props) => {
       apiName: "getData",
       reqType: "GET",
       queryData: {
-        page,
-        size: pageSize,
+        offset: (state.page - 1) * state.pageSize,
+        size: state.pageSize,
         sortOrder: sortInfo.order === "ascend",
         sortBy: sortInfo.field,
       },
     });
 
     if (code === 0) {
-      setTotal(data.total || 0);
-      setDataSource(data.list || []);
+      setState((state) => {
+        state.total = data.total || 0;
+        state.dataSource = data.list || [];
+      });
     }
-    setTableLoading(false);
+    setState((state) => {
+      state.tableLoading = false;
+    });
   };
 
   return (
@@ -147,8 +169,8 @@ export default (props) => {
         <RTable
           resizable
           namespace="namespace"
-          loading={tableLoading}
-          dataSource={dataSource}
+          loading={state.tableLoading}
+          dataSource={state.dataSource}
           columns={columns}
           pagination={false}
           rowKey={(r) => r.id}
@@ -171,7 +193,9 @@ export default (props) => {
               field,
               order,
             });
-            setPage(1);
+            setState((state) => {
+              state.page = 1;
+            });
           }}
           onRow={(record) => ({
             onClick: (e) => {
@@ -186,12 +210,15 @@ export default (props) => {
           })}
         />
         <RPagination
-          current={page}
-          pageSize={pageSize}
-          total={total}
-          onChange={(p, pz) => {
-            setPage(p);
-            setPageSize(pz);
+          namespace={paginationNamespace}
+          current={state.page}
+          pageSize={state.pageSize}
+          total={state.total}
+          onChange={(p: number, pz: number) => {
+            setState((state) => {
+              state.page = p;
+              state.pageSize = pz;
+            });
           }}
           isNeedUpdateUrl={true}
           style={{ marginTop: 20 }}
